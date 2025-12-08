@@ -1,98 +1,317 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import {
+  ArrowRight,
+  Budget,
+  Expense,
+  ExpensesEmptyData,
+  Home,
+  Income,
+  IncomeEmptyData,
+  Transaction,
+  User,
+} from "@/assets";
+import Cards from "@/components/DashboardComponents/Cards";
+import ExpenseIncomeToggle from "@/components/DashboardComponents/ToggleComponent";
+import Button from "@/components/General-Components/Button";
+import { router } from "expo-router";
+import { useState } from "react";
+import { Text, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const outstandingBudget = 0.0;
+
+const Categories = ({
+  label,
+  amount,
+  icon,
+}: {
+  label: string;
+  amount: number;
+  icon: React.ReactNode;
+}) => {
+  return (
+    <View className="gap-2 bg-accent p-3 w-40 rounded-3xl h-32 ">
+      {icon}
+      <Text className="text-textcolor text-bodymedium font-normal pr-3">
+        {label}
+      </Text>
+      <Text className="text-dark text-titlemedium font-normal pr-3">
+        {"₹"}
+        {amount}
+      </Text>
+    </View>
+  );
+};
+
+const SourceOfFunds = ({
+  source,
+  icon,
+  amount,
+}: {
+  source: string;
+  icon: React.ReactNode;
+  amount: number;
+}) => {
+  return (
+    <View>
+      <View
+        className={`flex-row items-center gap-2.5 px-5  py-3 rounded-[20px] ${
+          source === "Income" ? "bg-success-100" : "bg-danger-100"
+        } `}
+      >
+        <View
+          className={`${
+            source === "Income" ? "bg-success-400" : "bg-danger-400"
+          } p-2 rounded-lg`}
+        >
+          {icon}
+        </View>
+        <View className="flex-col">
+          <Text className="text-textcolor text-labelsmall font-normal">
+            {source}
+          </Text>
+          <Text
+            className={`text-titlesmall font-normal pr-14 ${
+              source === "Income" ? "text-success-400" : "text-danger-400"
+            }`}
+          >
+            {"₹"}
+            {amount}
+          </Text>
+        </View>
+      </View>
+      <Text className="text-subtext text-labelsmall font-medium self-center pt-2">
+        24 % last month
+      </Text>
+    </View>
+  );
+};
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [switchValue, setSwitchValue] = useState<"Expense" | "Income">(
+    "Expense"
+  );
+  const handleSwitchChange = (value: "Expense" | "Income") => {
+    setSwitchValue(value);
+  };
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  // dummy data
+  const categories = [
+    { label: "Food", amount: 1000, icon: <Home width={24} height={24} /> },
+    { label: "Transport", amount: 1000, icon: <User width={24} height={24} /> },
+    {
+      label: "Entertainment",
+      amount: 1000,
+      icon: <Budget width={24} height={24} />,
+    },
+    {
+      label: "Shopping",
+      amount: 1000,
+      icon: <Transaction width={24} height={24} />,
+    },
+    {
+      label: "Other",
+      amount: 1000,
+      icon: <ArrowRight width={24} height={24} />,
+    },
+  ];
+
+  const cards = [
+    {
+      id: 1,
+      title: "Spotify",
+      subtitle: "Recharge",
+      icon: <Budget width={16} height={16} />,
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 2,
+      title: "Lunch",
+      subtitle: "at the office canteen",
+      icon: <Budget width={16} height={16} />,
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 3,
+      title: "Entertainment",
+      subtitle: "Vada Chennai movie",
+      icon: <Budget width={16} height={16} />,
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 4,
+      title: "Transport",
+      subtitle: "To the office",
+      icon: <Budget width={16} height={16} />,
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 5,
+      title: "Groceries",
+      subtitle: "Buy groceries",
+      icon: <Budget width={16} height={16} />,
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 6,
+      title: "Salary",
+      subtitle: "Monthly salary",
+      type: "Income",
+      amount: 69,
+    },
+    {
+      id: 7,
+      title: "Bonus",
+      subtitle: "Monthly bonus",
+      type: "Income",
+      amount: 69,
+    },
+    {
+      id: 8,
+      title: "Freelancing",
+      subtitle: "Monthly freelancing income",
+      type: "Income",
+      amount: 69,
+    },
+  ];
+
+  const cardsFilter = cards.filter(
+    (card: { type: string }) => card.type === switchValue
+  );
+
+  const now = new Date();
+  return (
+    <View className="flex-1 p-6">
+      <View className="flex-row items-center gap-3 pb-2">
+        <Text className="text-headlinesmall font-bold px-2.5 py-[9px] bg-secondary-400 rounded-tl-3xl rounded-lg text-light">
+          JP
+        </Text>
+        <View className="flex-col">
+          <Text className="text-headlinesmall font-bold text-dark">
+            Jessi Pinkman
+          </Text>
+          <Text className="text-subtext text-labelmedium font-medium">
+            {now.toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+              weekday: "long",
+            })}
+          </Text>
+        </View>
+      </View>
+      <FlatList
+        data={cardsFilter}
+        renderItem={({ item }) => (
+          <Cards
+            title={item.title}
+            subtitle={item.subtitle}
+            icon={item.icon}
+            amount={item.amount}
+            type={item.type}
+          />
+        )}
+        keyExtractor={(item) => item.id.toString()}
+        ItemSeparatorComponent={() => <View className="h-6" />}
+        ListEmptyComponent={
+          switchValue === "Expense" ? (
+            <View className="flex-1 items-center justify-center pt-10">
+              <ExpensesEmptyData width={200} height={200} />
+            </View>
+          ) : (
+            <View className="flex-1 items-center justify-center pt-10 ">
+              <IncomeEmptyData width={200} height={200} />
+            </View>
+          )
+        }
+        ListHeaderComponent={
+          <>
+            <View className="pt-6 px-16 ">
+              <Text className="self-center pt-4 text-displaymedium font-normal text-dark">
+                {outstandingBudget.toFixed(2)}
+              </Text>
+              <Text className="text-titlesmall font-normal text-subtext self-center">
+                Outstanding Budget
+              </Text>
+            </View>
+            <View className="flex-row justify-between gap-2 pt-6">
+              <SourceOfFunds
+                source="Income"
+                icon={<Income width={24} height={24} />}
+                amount={1000}
+              />
+              <SourceOfFunds
+                source="Expense"
+                icon={<Expense width={24} height={24} />}
+                amount={1000}
+              />
+            </View>
+            <View className="flex-row justify-between items-center pt-6">
+              <Text className="text-dark text-titlelarge font-normal">
+                Categories
+              </Text>
+              <Button
+                onPress={() => {
+                  router.push("/categories");
+                }}
+                variant="primary"
+                size="sm"
+                startIcon={<ArrowRight width={14} height={14} />}
+                className="w-10 h-10 rounded-full"
+              />
+            </View>
+            <View className="pt-6">
+              <FlatList
+                data={categories}
+                renderItem={({ item }) => (
+                  <Categories
+                    label={item.label}
+                    amount={item.amount}
+                    icon={item.icon}
+                  />
+                )}
+                keyExtractor={(item) => item.label}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: 10 }}
+                scrollEnabled={true}
+              />
+            </View>
+            <View className="py-6">
+              <Text className="font-normal text-titlelarge text-dark">
+                Today Activity
+              </Text>
+            </View>
+            <View className="px-16">
+              <ExpenseIncomeToggle
+                label1="Expense"
+                label2="Income"
+                value={switchValue}
+                onChange={handleSwitchChange}
+              />
+            </View>
+            <View className="flex-row justify-between items-center py-6">
+              <Text className="text-subtext text-titlelarge font-normal">
+                {switchValue === "Expense" ? "Spending" : "Received"}
+              </Text>
+              <Text
+                className={`${
+                  switchValue === "Expense"
+                    ? "text-danger-400"
+                    : "text-success-400"
+                } font-normal text-titlelarge`}
+              >
+                {"₹"} 1000
+              </Text>
+            </View>
+          </>
+        }
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
