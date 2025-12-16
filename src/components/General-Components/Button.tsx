@@ -24,6 +24,8 @@ interface ButtonProps {
   textColor?: string;
 
   className?: string;
+  startIconClassName?: string;
+  endIconClassName?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -39,6 +41,8 @@ const Button: React.FC<ButtonProps> = ({
   rounded = "rounded-full",
   textColor,
   className,
+  startIconClassName,
+  endIconClassName,
 }) => {
   // ----------------------------------------
   // VARIANT STYLES
@@ -100,7 +104,9 @@ const Button: React.FC<ButtonProps> = ({
     >
       <View className="flex-row items-center justify-center gap-2">
         {/* LEFT ICON (START ICON) */}
-        {!isLoading && startIcon}
+        {!isLoading && startIcon && (
+          <View className={startIconClassName}>{startIcon}</View>
+        )}
 
         {/* LOADING SPINNER */}
         {isLoading ? (
@@ -112,7 +118,9 @@ const Button: React.FC<ButtonProps> = ({
         )}
 
         {/* RIGHT ICON (END ICON) */}
-        {!isLoading && endIcon}
+        {!isLoading && endIcon && (
+          <View className={endIconClassName}>{endIcon}</View>
+        )}
       </View>
     </Pressable>
   );

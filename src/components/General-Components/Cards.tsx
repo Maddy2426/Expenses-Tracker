@@ -1,4 +1,4 @@
-import { Clock } from "@/assets";
+import { Clock } from "@/src/assets";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -59,7 +59,9 @@ const Cards = ({
             <View className={`${rightIconClassName}`}>{rightIcon}</View>
           )}
         </View>
-        {borderbottom && <View className="border-b border-accent w-full " />}
+        {borderbottom && (
+          <View className="border-b border-accent w-full pt-2 " />
+        )}
       </View>
     </Pressable>
   );

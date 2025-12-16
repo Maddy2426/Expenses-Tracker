@@ -8,16 +8,16 @@ import {
   IncomeEmptyData,
   Transaction,
   User,
-} from "@/assets";
-import Cards from "@/components/DashboardComponents/Cards";
-import ExpenseIncomeToggle from "@/components/DashboardComponents/ToggleComponent";
-import Button from "@/components/General-Components/Button";
+} from "@/src/assets";
+import { NumberRoller } from "@/src/components/DashboardComponents/NumberRoller";
+import Cards from "@/src/components/General-Components/Cards";
+import Button from "@/src/components/General-Components/Button";
+import ExpenseIncomeToggle from "@/src/components/General-Components/ToggleComponent";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-
-const outstandingBudget = 0.0;
+import { useCounterStore } from "@/src/store/useCounterStore";
 
 const Categories = ({
   label,
@@ -177,6 +177,48 @@ export default function HomeScreen() {
       type: "Income",
       amount: 69,
     },
+    {
+      id: 9,
+      title: "groceries",
+      subtitle: "parupu",
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 10,
+      title: "groceries",
+      subtitle: "parupu",
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 11,
+      title: "groceries",
+      subtitle: "parupu",
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 12,
+      title: "groceries",
+      subtitle: "parupu",
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 13,
+      title: "groceries",
+      subtitle: "parupu",
+      type: "Expense",
+      amount: 69,
+    },
+    {
+      id: 14,
+      title: "groceries",
+      subtitle: "parupu",
+      type: "Expense",
+      amount: 69,
+    },
   ];
 
   const cardsFilter = cards.filter(
@@ -184,8 +226,20 @@ export default function HomeScreen() {
   );
 
   const now = new Date();
+  const count = useCounterStore((state) => state.count);
+  const increase = useCounterStore((state) => state.increase);
+  const decrease = useCounterStore((state) => state.decrease);
+  const reset = useCounterStore((state) => state.reset);
   return (
-    <View className="flex-1 p-6">
+    <View className="flex-1 p-6 ">
+      <View className="flex-row justify-between pb-6">
+        <Text className="text-labellarge text-center">{count}</Text>
+
+        <Button variant="primary" label="increment" onPress={increase} />
+        <Button variant="primary" label="decrement" onPress={decrease} />
+        <Button variant="primary" label="reset" onPress={reset} />
+      </View>
+
       <View className="flex-row items-center gap-3 pb-2">
         <Text className="text-headlinesmall font-bold px-2.5 py-[9px] bg-secondary-400 rounded-tl-3xl rounded-lg text-light">
           JP
@@ -230,10 +284,14 @@ export default function HomeScreen() {
         }
         ListHeaderComponent={
           <>
-            <View className="pt-6 px-16 ">
-              <Text className="self-center pt-4 text-displaymedium font-normal text-dark">
+            <View className="pt-6 px-16 gap-4 ">
+              {/* <Text className="self-center pt-4 text-displaymedium font-normal text-dark">
                 {outstandingBudget.toFixed(2)}
-              </Text>
+              </Text> */}
+              <View className="flex-row justify-center items-center">
+                <NumberRoller value={1346.21} />
+              </View>
+
               <Text className="text-titlesmall font-normal text-subtext self-center">
                 Outstanding Budget
               </Text>

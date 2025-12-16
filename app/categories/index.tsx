@@ -1,14 +1,13 @@
 import {
-  ArrowLeft,
   ArrowLeftWithOutTail,
   ArrowRight,
   Budget,
   Home,
   Transaction,
   User,
-} from "@/assets";
-import Cards from "@/components/DashboardComponents/Cards";
-import Button from "@/components/General-Components/Button";
+} from "@/src/assets";
+import Button from "@/src/components/General-Components/Button";
+import Cards from "@/src/components/General-Components/Cards";
 import { router } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
@@ -111,7 +110,6 @@ const index = () => {
           )}
           keyExtractor={(item) => item.id.toString()}
           showsHorizontalScrollIndicator={false}
-         
         />
       </View>
     </View>

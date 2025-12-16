@@ -9,10 +9,10 @@ import {
   TransactionActive,
   User,
   UserActive,
-} from "@/assets";
-import { HapticTab } from "@/components/TabBar-Components/haptic-tab";
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme.web";
+} from "@/src/assets";
+import { HapticTab } from "@/src/components/TabBar-Components/haptic-tab";
+import { Colors } from "@/src/constants/theme";
+import { useColorScheme } from "@/src/hooks/use-color-scheme.web";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Text } from "react-native";

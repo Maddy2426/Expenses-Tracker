@@ -6,9 +6,10 @@ const RootStack = () => {
     <Stack
       screenOptions={{
         contentStyle: { backgroundColor: "transparent" },
-        // animation: "slide_from_right", // Add animation here
+        animation: "slide_from_bottom", // Add animation here
       }}
     >
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen
         name="categories"
