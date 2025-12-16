@@ -3,15 +3,19 @@ import {
   ArrowRight,
   Budget,
   Clock,
+  Delete,
+  Edit,
   Home,
   Transaction,
   User,
-} from "@/assets";
-import Button from "@/components/General-Components/Button";
+} from "@/src/assets";
+import Button from "@/src/components/General-Components/Button";
+import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { AmountCard } from ".";
 
 const CategoryDetails = () => {
@@ -108,32 +112,52 @@ const CategoryDetails = () => {
   ];
 
   const CategoryCard = ({ item }: { item: any }) => {
+    const renderRightActions = () => (
+      <View className="flex-row justify-center items-center gap-2 pl-3">
+        <View className="bg-secondary-100 flex-row items-center gap-2 px-5 py-4 rounded-lg">
+          <Edit width={16} height={16} />
+        </View>
+        <View className="bg-danger-100 flex-row items-center gap-2 px-5 py-4 rounded-lg">
+          <Delete width={16} height={16} />
+        </View>
+      </View>
+    );
+
+    const handleSwipeableWillOpen = () => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    };
+
     return (
-      <View className="pt-5 justify-between">
-        <View className="flex-row justify-between items-center">
-          <View className="flex-row items-center gap-1">
-            <Text className="text-labelmedium font-medium text-textcolor">
-              {item.date}
-            </Text>
+      <Swipeable
+        renderRightActions={renderRightActions}
+        onSwipeableWillOpen={handleSwipeableWillOpen}
+      >
+        <View className="pt-5 justify-between">
+          <View className="flex-row justify-between items-center">
             <View className="flex-row items-center gap-1">
-              <Clock width={10} height={10} />
               <Text className="text-labelmedium font-medium text-textcolor">
-                {item.time}
+                {item.date}
+              </Text>
+              <View className="flex-row items-center gap-1">
+                <Clock width={10} height={10} />
+                <Text className="text-labelmedium font-medium text-textcolor">
+                  {item.time}
+                </Text>
+              </View>
+            </View>
+            <View className="flex-row items-center justify-center gap-2">
+              <Text className="text-labellarge font-medium text-dark">
+                {"₹"} {item.amount}
               </Text>
             </View>
           </View>
-          <View className="flex-row items-center justify-center gap-2">
-            <Text className="text-labellarge font-medium text-dark">
-              {"₹"} {item.amount}
+          <View className="flex-row items-center pt-2">
+            <Text className="text-bodysmall font-normal text-subtext">
+              {item.description}
             </Text>
           </View>
         </View>
-        <View className="flex-row items-center pt-2">
-          <Text className="text-bodysmall font-normal text-subtext">
-            {item.description}
-          </Text>
-        </View>
-      </View>
+      </Swipeable>
     );
   };
 

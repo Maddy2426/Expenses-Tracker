@@ -1,11 +1,30 @@
-import { View, Text } from "react-native";
-import React from "react";
+import CustomBottomSheet, {
+  CustomBottomSheetRef,
+} from "@/src/components/General-Components/CustomBottomSheet";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback, useRef } from "react";
+import { Text, View } from "react-native";
 
 const Createexpenses = () => {
+  const bottomSheetRef = useRef<CustomBottomSheetRef>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Small delay to ensure ref is ready
+      const timer = setTimeout(() => {
+        bottomSheetRef.current?.open();
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }, [])
+  );
+
   return (
-    <View className="flex-1 items-center justify-center ">
-      <Text className="text-textcolor text-2xl font-bold">create expenses</Text>
-    </View>
+    <CustomBottomSheet
+      ref={bottomSheetRef}
+      title="Create New Activity"
+      snapPoints={["25%"]}
+    ></CustomBottomSheet>
   );
 };
 

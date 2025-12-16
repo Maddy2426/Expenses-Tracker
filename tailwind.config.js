@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
+    "./src/components/**/*.{js,jsx,ts,tsx}",
+  ],
   presets: [require("nativewind/preset")],
   theme: {
     // Set SF Pro Display Regular as default
@@ -51,6 +55,14 @@ module.exports = {
         danger: {
           // Valid fields
           // Danger messages
+          400: "#F11B1E",
+          300: "#DD2C2F",
+          200: "#F3B0B1",
+          100: "#FFEAEB",
+        },
+        warning: {
+          // Valid fields
+          // Warning messages
           400: "#F11B1E",
           300: "#DD2C2F",
           200: "#F3B0B1",
