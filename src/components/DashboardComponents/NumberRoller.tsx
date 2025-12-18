@@ -53,7 +53,7 @@ export const NumberRoller: React.FC<NumberRollerProps> = ({
   }, [targetValue, autoStart, duration]);
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 justify-center items-center">
       {(() => {
         const hasFraction = targetValue % 1 !== 0;
         const formatted = currentValue.toLocaleString(undefined, {
@@ -63,7 +63,7 @@ export const NumberRoller: React.FC<NumberRollerProps> = ({
         const [intPart, decPart] = formatted.split(".");
 
         return (
-          <Text className="text-displaymedium font-normal">
+          <Text className="text-displaymedium font-normal pt-3">
             {"₹"} {intPart}
             {decPart ? <Text className="text-subtext">.{decPart}</Text> : null}
           </Text>
@@ -72,10 +72,3 @@ export const NumberRoller: React.FC<NumberRollerProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
