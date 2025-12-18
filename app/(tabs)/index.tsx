@@ -16,7 +16,10 @@ import ExpenseIncomeToggle from "@/src/components/General-Components/ToggleCompo
 import { useBiometricPrefStore } from "@/src/store/appLock.store";
 import { useLocalAuthStore } from "@/src/store/localAuth.store";
 import { useCounterStore } from "@/src/store/useCounterStore";
-import { scheduleAfterSeconds, scheduleDaily } from "@/src/utils/scheduleNotifications";
+import {
+  scheduleAfterSeconds,
+  scheduleDaily,
+} from "@/src/utils/scheduleNotifications";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Modal, Pressable, Text, View } from "react-native";
@@ -286,7 +289,7 @@ export default function HomeScreen() {
         <Button variant="primary" label="decrement" onPress={decrease} />
         <Button variant="primary" label="reset" onPress={reset} />
       </View> */}
-      <View>
+      {/* <View>
         <Button
           variant="primary"
           label="Schedule Notification"
@@ -297,7 +300,7 @@ export default function HomeScreen() {
           label="Schedule Daily Notification"
           onPress={() => scheduleDaily()}
         />
-      </View>
+      </View> */}
 
       <View className="flex-row items-center gap-3 pb-2">
         <Text className="text-headlinesmall font-bold px-2.5 py-[9px] bg-secondary-400 rounded-tl-3xl rounded-lg text-light">
