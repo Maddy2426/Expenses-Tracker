@@ -5,11 +5,24 @@ import { router } from "expo-router";
 import OtpInput from "@/src/components/authComponents/OtpInput";
 import Button from "@/src/components/General-Components/Button";
 import clsx from "clsx";
+import { useLocalAuthStore } from "@/src/store/localAuth.store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ForgotPassword = () => {
   const [otp, setOtp] = useState("");
   const [seconds, setSeconds] = useState(30);
   const [error, setError] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const raw = await AsyncStorage.getItem("local_user");
+      if (!raw) return;
+
+      const parsed = JSON.parse(raw);
+      if (parsed?.email) setUserEmail(parsed.email);
+    })();
+  }, []);
 
   // ✅ start countdown automatically
   useEffect(() => {
@@ -61,13 +74,13 @@ const ForgotPassword = () => {
           </Text>
         </View>
 
-        <View className="flex-row items-center">
-          <Text className="text-titlemedium font-normal text-subtext pt-4">
-            We’ve sent a code to
+        <View className="flex-row flex-wrap items-center pt-4">
+          <Text className="text-titlemedium font-normal text-subtext ">
+            We’ve sent a code to{" "}
           </Text>
-          <Text className="text-titlemedium font-semibold text-dark pt-4">
-            {" "}
-            helloworld@gmail.com
+
+          <Text className="text-titlemedium font-semibold text-dark  flex-shrink">
+            {userEmail}
           </Text>
         </View>
       </View>

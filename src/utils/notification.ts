@@ -33,12 +33,27 @@ export async function registerForPushNotificationsAsync(): Promise<{
   }
 
   // IMPORTANT: projectId must match your EAS project (you already have it in app.json -> extra.eas.projectId)
-  const expoPushToken = (
-    await Notifications.getExpoPushTokenAsync({
+  let expoPushToken: string | null = null;
+  try {
+    const tokenResult = await Notifications.getExpoPushTokenAsync({
       projectId: "b22b1d80-c70f-4aba-be2e-e1bd70f51311",
-    })
-  ).data;
+    });
+    expoPushToken = tokenResult.data;
+    console.log("✅ ExpoPushToken:", expoPushToken);
+  } catch (error: any) {
+    // Handle transient errors (like 503) gracefully
+    // Local notifications don't require push token, so this is not critical
+    if (error?.code === "SERVICE_UNAVAILABLE" || error?.isTransient) {
+      console.warn(
+        "⚠️ Expo push token service temporarily unavailable. Local notifications will still work."
+      );
+    } else {
+      console.warn(
+        "⚠️ Failed to get Expo push token:",
+        error?.message || error
+      );
+    }
+  }
 
-  console.log("✅ ExpoPushToken:", expoPushToken);
   return { expoPushToken };
 }

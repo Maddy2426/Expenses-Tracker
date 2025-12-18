@@ -1,30 +1,30 @@
 import { Back, Logo } from "@/src/assets";
 import FieldComponent from "@/src/components/authComponents/FieldComponent";
 import Button from "@/src/components/General-Components/Button";
+import { useLocalAuthStore } from "@/src/store/localAuth.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   Text,
   View,
-  ScrollView,
 } from "react-native";
 import { z } from "zod";
 
 const resetPasswordSchema = z
   .object({
-    password: z
-      .string()
-      .min(6, "Password must be at least 6 characters")
-      .max(16, "Password must be less than 16 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character"
-      ),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    // .max(20, "Password must be less than 20 characters")
+    // .regex(
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
+    //   "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character"
+    // ),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -35,6 +35,7 @@ const resetPasswordSchema = z
 type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
 const Resetpassword = () => {
+  const resetPasswordLocal = useLocalAuthStore((s) => s.resetPasswordLocal);
   const [success, setSuccess] = useState(false);
   const { control, handleSubmit } = useForm<ResetPasswordValues>({
     resolver: zodResolver(resetPasswordSchema),
@@ -68,20 +69,30 @@ const Resetpassword = () => {
       </View>
     );
   };
-  const onSubmit = (data: ResetPasswordValues) => {
+  const onSubmit = async (data: ResetPasswordValues) => {
+    const ok = await resetPasswordLocal({ newPassword: data.password });
+    if (ok) {
+      setSuccess(true);
+    } else {
+      Alert.alert("Failed to reset password");
+    }
     setSuccess(true);
     console.log(data);
   };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
+      className="flex-1"
     >
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <View className="flex-1 p-6">
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View className="flex-1 p-6 ">
           {success ? (
             <SuccessScreen />
           ) : (
-            <>
+            <View className="flex-1">
               <Pressable
                 onPress={() => router.back()}
                 className="flex-row items-center justify-between gap-2"
@@ -130,7 +141,7 @@ const Resetpassword = () => {
                   />
                 </View>
               </View>
-              <View className="flex-1 justify-end items-center ">
+              <View className="flex-1 justify-end items-center pb-6">
                 <View className="flex-row items-center gap-2">
                   <Text className="text-titlemedium font-normal text-subtext">
                     Already have an account?
@@ -145,7 +156,7 @@ const Resetpassword = () => {
                   </Pressable>
                 </View>
               </View>
-            </>
+            </View>
           )}
         </View>
       </ScrollView>

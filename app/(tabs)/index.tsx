@@ -10,14 +10,20 @@ import {
   User,
 } from "@/src/assets";
 import { NumberRoller } from "@/src/components/DashboardComponents/NumberRoller";
-import Cards from "@/src/components/General-Components/Cards";
 import Button from "@/src/components/General-Components/Button";
+import Cards from "@/src/components/General-Components/Cards";
 import ExpenseIncomeToggle from "@/src/components/General-Components/ToggleComponent";
-import { router } from "expo-router";
-import { useState } from "react";
-import { Text, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { useBiometricPrefStore } from "@/src/store/appLock.store";
+import { useLocalAuthStore } from "@/src/store/localAuth.store";
 import { useCounterStore } from "@/src/store/useCounterStore";
+import {
+  scheduleAfterSeconds,
+  scheduleDaily,
+} from "@/src/utils/scheduleNotifications";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, Modal, Pressable, Text, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 const Categories = ({
   label,
@@ -92,6 +98,39 @@ export default function HomeScreen() {
   );
   const handleSwitchChange = (value: "Expense" | "Income") => {
     setSwitchValue(value);
+  };
+  const { isLoggedIn } = useLocalAuthStore();
+  const { biometricEnabled, askedOnce, init, enableBiometric, markAsked } =
+    useBiometricPrefStore();
+  const [show, setShow] = useState(false);
+  console.log("biometricEnabled", biometricEnabled);
+  console.log("askedOnce", askedOnce);
+  console.log("isLoggedIn", isLoggedIn);
+  console.log("show", show);
+
+  useEffect(() => {
+    (async () => {
+      await init(); // load askedOnce + biometricEnabled from AsyncStorage
+    })();
+  }, []);
+
+  useEffect(() => {
+    // ✅ only after login + only once + only if not enabled
+    if (isLoggedIn && !biometricEnabled && !askedOnce) {
+      setShow(true);
+    }
+  }, [isLoggedIn, biometricEnabled, askedOnce]);
+
+  const onEnable = async () => {
+    const ok = await enableBiometric();
+    setShow(false);
+
+    if (!ok) {
+      Alert.alert(
+        "Biometric not enabled",
+        "Either you cancelled, or FaceID/Fingerprint is not set up on your phone."
+      );
+    }
   };
 
   // dummy data
@@ -225,20 +264,43 @@ export default function HomeScreen() {
     (card: { type: string }) => card.type === switchValue
   );
 
+  const onNotNow = async () => {
+    await markAsked(); // ✅ so it won’t ask again
+    setShow(false);
+  };
+
   const now = new Date();
   const count = useCounterStore((state) => state.count);
   const increase = useCounterStore((state) => state.increase);
   const decrease = useCounterStore((state) => state.decrease);
   const reset = useCounterStore((state) => state.reset);
+
+  useEffect(() => {
+    // Schedule daily notification when component mounts
+    scheduleDaily().catch(console.error);
+  }, []);
+
   return (
     <View className="flex-1 p-6 ">
-      <View className="flex-row justify-between pb-6">
+      {/* <View className="flex-row justify-between pb-6">
         <Text className="text-labellarge text-center">{count}</Text>
 
         <Button variant="primary" label="increment" onPress={increase} />
         <Button variant="primary" label="decrement" onPress={decrease} />
         <Button variant="primary" label="reset" onPress={reset} />
-      </View>
+      </View> */}
+      {/* <View>
+        <Button
+          variant="primary"
+          label="Schedule Notification"
+          onPress={scheduleAfterSeconds}
+        />
+        <Button
+          variant="primary"
+          label="Schedule Daily Notification"
+          onPress={() => scheduleDaily()}
+        />
+      </View> */}
 
       <View className="flex-row items-center gap-3 pb-2">
         <Text className="text-headlinesmall font-bold px-2.5 py-[9px] bg-secondary-400 rounded-tl-3xl rounded-lg text-light">
@@ -284,12 +346,12 @@ export default function HomeScreen() {
         }
         ListHeaderComponent={
           <>
-            <View className="pt-6 px-16 gap-4 ">
+            <View className="pt-5 px-16 gap-4 ">
               {/* <Text className="self-center pt-4 text-displaymedium font-normal text-dark">
                 {outstandingBudget.toFixed(2)}
               </Text> */}
-              <View className="flex-row justify-center items-center">
-                <NumberRoller value={1346.21} />
+              <View className="flex-row justify-center items-center ">
+                <NumberRoller value={1346.22} />
               </View>
 
               <Text className="text-titlesmall font-normal text-subtext self-center">
@@ -370,6 +432,28 @@ export default function HomeScreen() {
         }
         showsVerticalScrollIndicator={false}
       />
+      <Modal visible={show} transparent animationType="fade">
+        <View className="flex-1 justify-center items-center bg-black/50 px-6">
+          <View className="w-full rounded-2xl bg-white p-5">
+            <Text className="text-lg font-bold text-dark">
+              Enable biometric unlock?
+            </Text>
+            <Text className="text-subtext mt-2">
+              Use Face ID / Fingerprint to unlock the app next time.
+            </Text>
+
+            <View className="flex-row justify-end gap-3 mt-5">
+              <Pressable onPress={onNotNow}>
+                <Text className="text-dark font-semibold">Not now</Text>
+              </Pressable>
+
+              <Pressable onPress={onEnable}>
+                <Text className="text-secondary-400 font-semibold">Enable</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

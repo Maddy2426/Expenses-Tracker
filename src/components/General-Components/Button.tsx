@@ -10,7 +10,7 @@ interface ButtonProps {
 
   // Primary UI
   variant?: "primary" | "secondary" | "outline" | "danger";
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 
   // Icons
   startIcon?: React.ReactNode;
@@ -65,6 +65,7 @@ const Button: React.FC<ButtonProps> = ({
       md: "py-4 px-[18px]",
       lg: "py-4 px-5",
       xl: "py-[19px] px-7",
+      xxl: "px-11 py-[18px]",
     }[size] || "py-4 px-[18px]";
 
   // ----------------------------------------
@@ -81,6 +82,7 @@ const Button: React.FC<ButtonProps> = ({
       md: `text-titlemedium font-medium ${finalTextColor}`,
       lg: `text-titlemedium font-medium ${finalTextColor}`,
       xl: `text-bodylarge font-medium ${finalTextColor}`,
+      xxl: `text-labellarge font-medium ${finalTextColor}`,
     }[size] || `text-titlemedium font-medium ${finalTextColor}`;
 
   const isDisabled = disabled || isLoading;
@@ -102,7 +104,7 @@ const Button: React.FC<ButtonProps> = ({
         className
       )}
     >
-      <View className="flex-row items-center justify-center gap-2">
+      <View className="flex-row items-center justify-center gap-2 ">
         {/* LEFT ICON (START ICON) */}
         {!isLoading && startIcon && (
           <View className={startIconClassName}>{startIcon}</View>
