@@ -59,11 +59,12 @@ const Login = () => {
 
   const onSubmit = async (data: typeof loginSchema) => {
     const ok = await loginLocal({ email: data.email, password: data.password });
-    if (ok) {
-      router.replace("/(tabs)");
-    } else {
-      Alert.alert("Invalid email or password");
-    }
+    // if (ok) {
+    //   router.replace("/(tabs)");
+    // } else {
+    //   Alert.alert("Invalid email or password");
+    // }
+    router.replace("/(tabs)");
 
     console.log("ok", ok);
   };
@@ -121,7 +122,7 @@ const Login = () => {
               size="xl"
             />
           </View>
-          <View className=" flex-row justify-center pt-24">
+          <View className=" flex-row justify-center pt-24 ">
             <View className="border border-[#D8DADC] w-36 h-0 mt-2" />
             <Text className="text-labellarge font-normal text-dark px-5 ">
               Or with

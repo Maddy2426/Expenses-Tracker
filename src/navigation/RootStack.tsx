@@ -18,6 +18,13 @@ const RootStack = () => {
           animation: "slide_from_right", // Or set it per screen
         }}
       />
+      <Stack.Screen
+        name="(forms)"
+        options={{
+          headerShown: false,
+          animation: "slide_from_right", // Or set it per screen
+        }}
+      />
     </Stack>
   );
 };

@@ -23,11 +23,21 @@ export async function scheduleAfterSeconds() {
 export async function scheduleDaily(hour = 17, minute = 35) {
   await registerForPushNotificationsAsync();
 
+  // Cancel the existing daily notification if it exists
+  try {
+    await Notifications.cancelScheduledNotificationAsync("daily-reminder");
+  } catch (error) {
+    // Notification doesn't exist yet, that's okay
+  }
+
   await Notifications.scheduleNotificationAsync({
+    identifier: "daily-reminder", // Unique identifier
     content: {
       title: "Daily Reminder",
       body: "Open the app",
       data: { route: "/(tabs)" },
+      badge: 1,
+      sound: "Message.mp3",
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,

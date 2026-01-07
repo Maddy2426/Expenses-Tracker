@@ -1,11 +1,12 @@
 import CustomBottomSheet, {
   CustomBottomSheetRef,
 } from "@/src/components/General-Components/CustomBottomSheet";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect, usePathname } from "expo-router";
 import React, { useCallback, useRef } from "react";
-import { Text, View } from "react-native";
 
 const Createexpenses = () => {
+  const path = usePathname();
+  console.log(path);
   const bottomSheetRef = useRef<CustomBottomSheetRef>(null);
 
   useFocusEffect(
@@ -24,6 +25,15 @@ const Createexpenses = () => {
       ref={bottomSheetRef}
       title="Create New Activity"
       snapPoints={["25%"]}
+      onRightButtonPress={() => {
+        router.push({ pathname: "(forms)", params: { type: "income" } } as any);
+      }}
+      onLeftButtonPress={() => {
+        router.push({
+          pathname: "(forms)",
+          params: { type: "expense" },
+        } as any);
+      }}
     ></CustomBottomSheet>
   );
 };
