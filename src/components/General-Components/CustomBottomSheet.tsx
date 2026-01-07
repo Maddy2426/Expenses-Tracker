@@ -23,6 +23,8 @@ interface CustomBottomSheetProps {
   handleColor?: string;
   borderRadius?: number;
   titleClassName?: string;
+  onRightButtonPress?: () => void;
+  onLeftButtonPress?: () => void;
 }
 
 const CustomBottomSheet = forwardRef<
@@ -39,6 +41,8 @@ const CustomBottomSheet = forwardRef<
       handleColor = "#d1d5db",
       borderRadius = 50,
       titleClassName = "text-titlelarge font-normal text-center text-dark mt-5 mb-6",
+      onRightButtonPress,
+      onLeftButtonPress,
     },
     ref
   ) => {
@@ -106,13 +110,15 @@ const CustomBottomSheet = forwardRef<
             leftButtonIconDirection="left"
             rightButtonTextColor="text-success-400"
             leftButtonTextColor="text-danger-400"
-            rightButtonClassName="rounded-[16px] border-success-400 border-b-4"
-            leftButtonClassName="rounded-[16px] border-danger-400 border-b-4"
+            rightButtonClassName="rounded-xl border-success-400 border-b-4"
+            leftButtonClassName="rounded-xl border-danger-400 border-b-4"
             rightButtonPress={() => {
               console.log("New Income");
+              onRightButtonPress?.();
             }}
             LeftButtonPress={() => {
               console.log("New Expense");
+              onLeftButtonPress?.();
             }}
           />
         </View>

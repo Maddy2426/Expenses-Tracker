@@ -16,6 +16,8 @@ import ExpenseIncomeToggle from "@/src/components/General-Components/ToggleCompo
 import { useBiometricPrefStore } from "@/src/store/appLock.store";
 import { useLocalAuthStore } from "@/src/store/localAuth.store";
 import { useCounterStore } from "@/src/store/useCounterStore";
+import { useIncomeStore } from "@/src/store/useIncome";
+import { useExpensesStore } from "@/src/store/useExpenses";
 import {
   scheduleAfterSeconds,
   scheduleDaily,
@@ -108,6 +110,15 @@ export default function HomeScreen() {
   console.log("isLoggedIn", isLoggedIn);
   console.log("show", show);
 
+  const incomeData = useIncomeStore();
+
+  const expensesData = useExpensesStore();
+  console.log(
+    "date-----------",
+    incomeData.transactions,
+    expensesData.transactions
+  );
+
   useEffect(() => {
     (async () => {
       await init(); // load askedOnce + biometricEnabled from AsyncStorage
@@ -154,121 +165,37 @@ export default function HomeScreen() {
     },
   ];
 
-  const cards = [
-    {
-      id: 1,
-      title: "Spotify",
-      subtitle: "Recharge",
-      icon: <Budget width={16} height={16} />,
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 2,
-      title: "Lunch",
-      subtitle: "at the office canteen",
-      icon: <Budget width={16} height={16} />,
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 3,
-      title: "Entertainment",
-      subtitle: "Vada Chennai movie",
-      icon: <Budget width={16} height={16} />,
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 4,
-      title: "Transport",
-      subtitle: "To the office",
-      icon: <Budget width={16} height={16} />,
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 5,
-      title: "Groceries",
-      subtitle: "Buy groceries",
-      icon: <Budget width={16} height={16} />,
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 6,
-      title: "Salary",
-      subtitle: "Monthly salary",
-      type: "Income",
-      amount: 69,
-    },
-    {
-      id: 7,
-      title: "Bonus",
-      subtitle: "Monthly bonus",
-      type: "Income",
-      amount: 69,
-    },
-    {
-      id: 8,
-      title: "Freelancing",
-      subtitle: "Monthly freelancing income",
-      type: "Income",
-      amount: 69,
-    },
-    {
-      id: 9,
-      title: "groceries",
-      subtitle: "parupu",
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 10,
-      title: "groceries",
-      subtitle: "parupu",
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 11,
-      title: "groceries",
-      subtitle: "parupu",
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 12,
-      title: "groceries",
-      subtitle: "parupu",
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 13,
-      title: "groceries",
-      subtitle: "parupu",
-      type: "Expense",
-      amount: 69,
-    },
-    {
-      id: 14,
-      title: "groceries",
-      subtitle: "parupu",
-      type: "Expense",
-      amount: 69,
-    },
-  ];
+  const isDateToday = (date: Date | string | undefined): boolean => {
+    if (!date) return false;
+    const dateObj = date instanceof Date ? date : new Date(date);
+    if (isNaN(dateObj.getTime())) return false; // Invalid date
 
-  const cardsFilter = cards.filter(
-    (card: { type: string }) => card.type === switchValue
-  );
+    const today = new Date();
+    return (
+      dateObj.getDate() === today.getDate() &&
+      dateObj.getMonth() === today.getMonth() &&
+      dateObj.getFullYear() === today.getFullYear()
+    );
+  };
 
+  // Filter to show only today's transactions
+  const cardsFilter =
+    switchValue === "Expense"
+      ? expensesData.transactions
+      : incomeData.transactions;
   const onNotNow = async () => {
     await markAsked(); // ✅ so it won’t ask again
     setShow(false);
   };
-
+  const todaycardsFilter =
+    switchValue === "Expense"
+      ? expensesData.transactions?.filter((transaction) =>
+          isDateToday(transaction.date)
+        )
+      : incomeData.transactions?.filter((transaction) =>
+          isDateToday(transaction.date)
+        );
+  console.log("todaycardsFilter", todaycardsFilter);
   const now = new Date();
   const count = useCounterStore((state) => state.count);
   const increase = useCounterStore((state) => state.increase);
@@ -282,26 +209,6 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 p-6 ">
-      {/* <View className="flex-row justify-between pb-6">
-        <Text className="text-labellarge text-center">{count}</Text>
-
-        <Button variant="primary" label="increment" onPress={increase} />
-        <Button variant="primary" label="decrement" onPress={decrease} />
-        <Button variant="primary" label="reset" onPress={reset} />
-      </View> */}
-      {/* <View>
-        <Button
-          variant="primary"
-          label="Schedule Notification"
-          onPress={scheduleAfterSeconds}
-        />
-        <Button
-          variant="primary"
-          label="Schedule Daily Notification"
-          onPress={() => scheduleDaily()}
-        />
-      </View> */}
-
       <View className="flex-row items-center gap-3 pb-2">
         <Text className="text-headlinesmall font-bold px-2.5 py-[9px] bg-secondary-400 rounded-tl-3xl rounded-lg text-light">
           JP
@@ -321,14 +228,14 @@ export default function HomeScreen() {
         </View>
       </View>
       <FlatList
-        data={cardsFilter}
+        data={todaycardsFilter as any}
         renderItem={({ item }) => (
           <Cards
-            title={item.title}
-            subtitle={item.subtitle}
-            icon={item.icon}
+            title={item.category}
+            subtitle={item.time}
+            icon={<></>}
             amount={item.amount}
-            type={item.type}
+            type={switchValue}
           />
         )}
         keyExtractor={(item) => item.id.toString()}
@@ -350,6 +257,9 @@ export default function HomeScreen() {
               {/* <Text className="self-center pt-4 text-displaymedium font-normal text-dark">
                 {outstandingBudget.toFixed(2)}
               </Text> */}
+              <Pressable onPress={() => scheduleAfterSeconds()}>
+                <Text>Schedule Notification</Text>
+              </Pressable>
               <View className="flex-row justify-center items-center ">
                 <NumberRoller value={1346.22} />
               </View>
@@ -362,12 +272,12 @@ export default function HomeScreen() {
               <SourceOfFunds
                 source="Income"
                 icon={<Income width={24} height={24} />}
-                amount={1000}
+                amount={incomeData.getTotalAmount()}
               />
               <SourceOfFunds
                 source="Expense"
                 icon={<Expense width={24} height={24} />}
-                amount={1000}
+                amount={expensesData.getTotalAmount()}
               />
             </View>
             <View className="flex-row justify-between items-center pt-6">
@@ -425,7 +335,48 @@ export default function HomeScreen() {
                     : "text-success-400"
                 } font-normal text-titlelarge`}
               >
-                {"₹"} 1000
+                {"₹"}{" "}
+                {(() => {
+                  const today = new Date();
+
+                  // Helper function to safely convert date and check if it's today
+                  const isDateToday = (
+                    date: Date | string | undefined
+                  ): boolean => {
+                    if (!date) return false;
+                    const dateObj =
+                      date instanceof Date ? date : new Date(date);
+                    if (isNaN(dateObj.getTime())) return false; // Invalid date
+
+                    return (
+                      dateObj.getDate() === today.getDate() &&
+                      dateObj.getMonth() === today.getMonth() &&
+                      dateObj.getFullYear() === today.getFullYear()
+                    );
+                  };
+
+                  if (switchValue === "Expense") {
+                    // Sum all amounts from today's expense transactions
+                    const todayExpenses =
+                      expensesData.transactions?.filter((transaction) =>
+                        isDateToday(transaction.date)
+                      ) || [];
+                    return todayExpenses.reduce(
+                      (sum, transaction) => sum + transaction.amount,
+                      0
+                    );
+                  } else {
+                    // Sum all amounts from today's income transactions
+                    const todayIncome =
+                      incomeData.transactions?.filter((transaction) =>
+                        isDateToday(transaction.date)
+                      ) || [];
+                    return todayIncome.reduce(
+                      (sum, transaction) => sum + transaction.amount,
+                      0
+                    );
+                  }
+                })()}
               </Text>
             </View>
           </>

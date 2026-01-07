@@ -87,6 +87,7 @@ export default function TabLayout() {
         name="createexpenses"
         options={{
           title: "Create Expenses",
+
           tabBarIcon: ({ color, size, focused }) =>
             focused ? (
               <Close width={10} height={10} />
@@ -107,9 +108,6 @@ export default function TabLayout() {
               }}
             />
           ),
-
-          // ... existing code ...
-
           tabBarLabel: ({ focused }) => focused && null,
         }}
       />

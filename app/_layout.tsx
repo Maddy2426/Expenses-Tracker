@@ -27,7 +27,7 @@ export default function RootLayout() {
       name: "Default",
       importance: Notifications.AndroidImportance.HIGH,
       shouldPlaySound: true,
-      shouldSetBadge: false,
+      shouldSetBadge: true,
       shouldShowBanner: true,
       shouldShowList: true,
       enableVibrate: true,
