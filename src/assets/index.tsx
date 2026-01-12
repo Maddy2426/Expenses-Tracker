@@ -31,3 +31,6 @@ export { default as GreenCalendar } from "@/src/assets/images/svg/solar_calendar
 export { default as Attachment } from "@/src/assets/images/svg/attachment.svg";
 export { default as Camera } from "@/src/assets/images/svg/camera.svg";
 export { default as Trash } from "@/src/assets/images/svg/ic_outline-delete.svg";
+export { default as SearchIcon } from "@/src/assets/images/svg/search.svg";
+export { default as Filter } from "@/src/assets/images/svg/Button.svg";
+export { default as Menu } from "@/src/assets/images/svg/Button (1).svg";
