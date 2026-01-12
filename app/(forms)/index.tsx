@@ -10,6 +10,7 @@ import {
 } from "@/src/assets";
 import Button from "@/src/components/General-Components/Button";
 import CustomDropdown from "@/src/components/General-Components/CustomDropdown";
+import DateandTime from "@/src/components/General-Components/DateandTime";
 import { useExpensesStore } from "@/src/store/useExpenses";
 import { useIncomeStore } from "@/src/store/useIncome";
 import * as DocumentPicker from "expo-document-picker";
@@ -109,43 +110,11 @@ const Index = () => {
         </Text>
       </View>
       <View className="items-center ">
-        <View
-          className={`flex-row items-center gap-3 rounded-lg  px-4 py-3 ${
-            typeParam === "expense" ? "bg-warning-100" : "bg-success-100"
-          }`}
-        >
-          {typeParam === "expense" ? (
-            <RedCalendar width={20} height={20} />
-          ) : (
-            <GreenCalendar width={20} height={20} />
-          )}
-          <Text
-            className={`text-labellarge ${
-              typeParam === "expense" ? "text-warning-400" : "text-success-400"
-            }`}
-          >
-            {todate.toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
-          </Text>
-          {typeParam === "expense" ? (
-            <RedClock width={20} height={20} />
-          ) : (
-            <GreenClock width={20} height={20} />
-          )}
-          <Text
-            className={`text-labellarge ${
-              typeParam === "expense" ? "text-warning-400" : "text-success-400"
-            }`}
-          >
-            {time.toLocaleTimeString("en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </Text>
-        </View>
+        <DateandTime
+          typeParam={typeParam as string}
+          todate={todate}
+          time={time}
+        />
       </View>
       <View className="pt-6 flex-1">
         <Text className="text-titlemedium font-medium text-subtext">

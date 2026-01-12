@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native";
 
 interface CardsProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   amount?: number;
   icon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -16,6 +16,7 @@ interface CardsProps {
   titleclassName?: string;
   subtitleclassName?: string;
   borderbottom?: boolean;
+  textcolor?: boolean;
 }
 
 const Cards = ({
@@ -31,12 +32,17 @@ const Cards = ({
   titleclassName = "font-normal text-bodymedium text-dark",
   subtitleclassName = "font-normal text-subtext text-bodysmall",
   borderbottom = false,
+  textcolor = false,
   onPress,
 }: CardsProps) => {
   return (
     <Pressable
-      className={`flex-row justify-between items-center pl-6 pr-4 py-5 rounded-3xl ${className} ${
-        type === "Expense" ? "bg-accent" : "bg-success-100"
+      className={`flex-row justify-between items-center pl-6 pr-4 py-5 rounded-3xl ${
+        className
+          ? className
+          : type === "Expense"
+          ? "bg-accent"
+          : "bg-success-100"
       }`}
       onPress={onPress}
     >
@@ -51,7 +57,13 @@ const Cards = ({
             </View>
           </View>
           {amount && (
-            <Text className="font-normal text-bodymedium">
+            <Text
+              className={`font-normal text-bodymedium ${
+                textcolor && type === "Expense"
+                  ? "text-warning-400"
+                  : "text-success-400"
+              }`}
+            >
               {"₹"} {amount}
             </Text>
           )}
