@@ -23,6 +23,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        animation: "shift",
         headerShown: false,
         tabBarButton: HapticTab,
         sceneStyle: { backgroundColor: "light" },
@@ -53,9 +54,8 @@ export default function TabLayout() {
               //     ? { color: "#4B4DED", fontWeight: "400", fontSize: 12 }
               //     : { color: "#4A4A68", fontWeight: "400", fontSize: 12 }
               // }
-              className={`${
-                focused ? "text-secondary-400" : "text-textcolor"
-              } text-xs font-normal`}
+              className={`${focused ? "text-secondary-400" : "text-textcolor"
+                } text-xs font-normal`}
             >
               Home
             </Text>
@@ -74,9 +74,8 @@ export default function TabLayout() {
             ),
           tabBarLabel: ({ focused }) => (
             <Text
-              className={`${
-                focused ? "text-secondary-400" : "text-textcolor"
-              } text-xs font-normal`}
+              className={`${focused ? "text-secondary-400" : "text-textcolor"
+                } text-xs font-normal`}
             >
               Transaction
             </Text>
@@ -84,7 +83,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="createexpenses"
+        name="createExpenses"
         options={{
           title: "Create Expenses",
 
@@ -128,9 +127,8 @@ export default function TabLayout() {
             ),
           tabBarLabel: ({ focused }) => (
             <Text
-              className={`${
-                focused ? "text-secondary-400" : "text-textcolor"
-              } text-xs font-normal`}
+              className={`${focused ? "text-secondary-400" : "text-textcolor"
+                } text-xs font-normal`}
             >
               Budget
             </Text>
@@ -149,9 +147,8 @@ export default function TabLayout() {
             ),
           tabBarLabel: ({ focused }) => (
             <Text
-              className={`${
-                focused ? "text-secondary-400" : "text-textcolor"
-              } text-xs font-normal`}
+              className={`${focused ? "text-secondary-400" : "text-textcolor"
+                } text-xs font-normal`}
             >
               Profile
             </Text>

@@ -1,5 +1,5 @@
 import {
-  ArrowRight,
+  ArrowRightWithTail,
   Budget,
   Expense,
   ExpensesEmptyData,
@@ -26,6 +26,7 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Modal, Pressable, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { FlashList } from "@shopify/flash-list";
 
 const Categories = ({
   label,
@@ -62,14 +63,12 @@ const SourceOfFunds = ({
   return (
     <View>
       <View
-        className={`flex-row items-center gap-2.5 px-5  py-3 rounded-[20px] ${
-          source === "Income" ? "bg-success-100" : "bg-danger-100"
-        } `}
+        className={`flex-row items-center gap-2.5 px-5  py-3 rounded-[20px] ${source === "Income" ? "bg-success-100" : "bg-danger-100"
+          } `}
       >
         <View
-          className={`${
-            source === "Income" ? "bg-success-400" : "bg-danger-400"
-          } p-2 rounded-lg`}
+          className={`${source === "Income" ? "bg-success-400" : "bg-danger-400"
+            } p-2 rounded-lg`}
         >
           {icon}
         </View>
@@ -78,9 +77,8 @@ const SourceOfFunds = ({
             {source}
           </Text>
           <Text
-            className={`text-titlesmall font-normal pr-14 ${
-              source === "Income" ? "text-success-400" : "text-danger-400"
-            }`}
+            className={`text-titlesmall font-normal pr-14 ${source === "Income" ? "text-success-400" : "text-danger-400"
+              }`}
           >
             {"₹"}
             {amount}
@@ -161,7 +159,7 @@ export default function HomeScreen() {
     {
       label: "Other",
       amount: 1000,
-      icon: <ArrowRight width={24} height={24} />,
+      icon: <ArrowRightWithTail width={24} height={24} />,
     },
   ];
 
@@ -190,11 +188,11 @@ export default function HomeScreen() {
   const todaycardsFilter =
     switchValue === "Expense"
       ? expensesData.transactions?.filter((transaction) =>
-          isDateToday(transaction.date)
-        )
+        isDateToday(transaction.date)
+      )
       : incomeData.transactions?.filter((transaction) =>
-          isDateToday(transaction.date)
-        );
+        isDateToday(transaction.date)
+      );
   console.log("todaycardsFilter", todaycardsFilter);
   const now = new Date();
   const count = useCounterStore((state) => state.count);
@@ -227,12 +225,12 @@ export default function HomeScreen() {
           </Text>
         </View>
       </View>
-      <FlatList
-        data={todaycardsFilter as any}
-        renderItem={({ item }) => (
+      <FlashList
+        data={todaycardsFilter}
+        renderItem={({ item, index }) => (
           <Cards
-            title={item.category}
-            subtitle={item.time}
+            title={item.category || ""}
+            subtitle={item.time || ""}
             icon={<></>}
             amount={item.amount}
             type={switchValue}
@@ -290,12 +288,12 @@ export default function HomeScreen() {
                 }}
                 variant="primary"
                 size="sm"
-                startIcon={<ArrowRight width={14} height={14} />}
+                startIcon={<ArrowRightWithTail width={14} height={14} />}
                 className="w-10 h-10 rounded-full"
               />
             </View>
-            <View className="pt-6">
-              <FlatList
+            <View className="pt-6 flex-1">
+              <FlashList
                 data={categories}
                 renderItem={({ item }) => (
                   <Categories
@@ -307,7 +305,7 @@ export default function HomeScreen() {
                 keyExtractor={(item) => item.label}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ gap: 10 }}
+                ItemSeparatorComponent={() => <View className="w-4" />}
                 scrollEnabled={true}
               />
             </View>
@@ -329,11 +327,10 @@ export default function HomeScreen() {
                 {switchValue === "Expense" ? "Spending" : "Received"}
               </Text>
               <Text
-                className={`${
-                  switchValue === "Expense"
-                    ? "text-danger-400"
-                    : "text-success-400"
-                } font-normal text-titlelarge`}
+                className={`${switchValue === "Expense"
+                  ? "text-danger-400"
+                  : "text-success-400"
+                  } font-normal text-titlelarge`}
               >
                 {"₹"}{" "}
                 {(() => {
