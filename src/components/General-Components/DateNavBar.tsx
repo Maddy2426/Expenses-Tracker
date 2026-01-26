@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Back, GreenCalendar } from "@/src/assets";
+import { ArrowLeft, ArrowRightWithTail, Back, GreenCalendar } from "@/src/assets";
 import React, { useCallback, useMemo, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import CustomDatePickerModal from "./CustomDatePickerModal";
@@ -104,7 +104,7 @@ const DateNavBar: React.FC<Props> = ({
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             className="pl-2"
           >
-            <ArrowRight width={15} height={15} />
+            <ArrowRightWithTail width={15} height={15} />
           </TouchableOpacity>
         </View>
       </View>

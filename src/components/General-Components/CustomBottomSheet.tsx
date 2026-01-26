@@ -23,6 +23,7 @@ interface CustomBottomSheetProps {
   handleColor?: string;
   borderRadius?: number;
   titleClassName?: string;
+  doubleButton?: boolean;
   onRightButtonPress?: () => void;
   onLeftButtonPress?: () => void;
 }
@@ -41,6 +42,7 @@ const CustomBottomSheet = forwardRef<
       handleColor = "#d1d5db",
       borderRadius = 50,
       titleClassName = "text-titlelarge font-normal text-center text-dark mt-5 mb-6",
+      doubleButton = true,
       onRightButtonPress,
       onLeftButtonPress,
     },
@@ -99,7 +101,7 @@ const CustomBottomSheet = forwardRef<
           {children}
         </BottomSheetView>
         <View className="flex-1 justify-end items-center mb-[30px]">
-          <DoubleButton
+          {doubleButton && <DoubleButton
             leftButtonVariant="secondary"
             rightButtonVariant="secondary"
             rightButtonLabel="New Income"
@@ -121,6 +123,7 @@ const CustomBottomSheet = forwardRef<
               onLeftButtonPress?.();
             }}
           />
+          }
         </View>
       </BottomSheet>
     );

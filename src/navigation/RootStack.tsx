@@ -6,25 +6,29 @@ const RootStack = () => {
     <Stack
       screenOptions={{
         contentStyle: { backgroundColor: "transparent" },
-        animation: "slide_from_bottom", // Add animation here
+
       }}
     >
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: "slide_from_bottom" }} />
       <Stack.Screen
         name="categories"
         options={{
           headerShown: false,
-          animation: "slide_from_right", // Or set it per screen
+          animation: "slide_from_left",
         }}
       />
       <Stack.Screen
         name="(forms)"
         options={{
           headerShown: false,
-          animation: "slide_from_right", // Or set it per screen
+          animation: "slide_from_left",
         }}
       />
+
+      <Stack.Screen name="(budget)" options={{ headerShown: false, animation: "slide_from_left" }} />
+      <Stack.Screen name="(profile)" options={{ headerShown: false, animation: "slide_from_left" }} />
+      <Stack.Screen name="transaction" options={{ headerShown: false, animation: "slide_from_left" }} />
     </Stack>
   );
 };

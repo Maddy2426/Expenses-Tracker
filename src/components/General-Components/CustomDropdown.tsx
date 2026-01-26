@@ -57,7 +57,7 @@ export default function CustomDropdown({
         style={{
           borderWidth: 1,
           borderColor: errorText ? "#EF4444" : isFocus ? "#6366F1" : "#E5E7EB",
-          borderRadius: 16,
+          borderRadius: 6,
           paddingHorizontal: 12,
           paddingVertical: 12,
           opacity: disabled ? 0.6 : 1,

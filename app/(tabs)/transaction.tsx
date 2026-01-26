@@ -1,9 +1,10 @@
-import { Budget, Clock, Home, User, Filter, Transaction } from "@/src/assets";
+import { Budget, Clock, Filter, Home, Transaction, User } from "@/src/assets";
 import Cards from "@/src/components/General-Components/Cards";
 import SearchBar from "@/src/components/General-Components/SearchBar";
+import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
 const Index = () => {
@@ -101,7 +102,7 @@ const Index = () => {
         className="bg-white"
         onPress={() => {
           router.push({
-            pathname: "/transaction/transactiondetail",
+            pathname: "/transaction/transactionDetail",
             params: {
               id: item.id.toString(),
               title: item.title,
@@ -129,9 +130,9 @@ const Index = () => {
       </View>
       <View className="flex-1">
         <View className="flex-1 pt-6">
-          <FlatList
+          <FlashList
             data={data}
-            renderItem={renderItem}
+            renderItem={({ item }) => renderItem({ item })}
             keyExtractor={(item) => item.id.toString()}
             contentContainerClassName="gap-4"
             showsVerticalScrollIndicator={false}

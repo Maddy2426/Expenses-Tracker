@@ -10,7 +10,7 @@ export { default as TransactionActive } from "@/src/assets/images/svg/transactio
 export { default as UserActive } from "@/src/assets/images/svg/useractive.svg";
 export { default as Expense } from "@/src/assets/images/svg/arrow-top-right-o.svg";
 export { default as Income } from "@/src/assets/images/svg/arrow-bottom-left-o.svg";
-export { default as ArrowRight } from "@/src/assets/images/svg/arrow-right.svg";
+export { default as ArrowRightWithTail } from "@/src/assets/images/svg/arrow-right.svg";
 export { default as Clock } from "@/src/assets/images/svg/Vector (10).svg";
 export { default as ArrowLeft } from "@/src/assets/images/svg/arrow-left.svg";
 export { default as ArrowLeftWithOutTail } from "@/src/assets/images/svg/Vector (11).svg";
@@ -34,3 +34,11 @@ export { default as Trash } from "@/src/assets/images/svg/ic_outline-delete.svg"
 export { default as SearchIcon } from "@/src/assets/images/svg/search.svg";
 export { default as Filter } from "@/src/assets/images/svg/Button.svg";
 export { default as Menu } from "@/src/assets/images/svg/Button (1).svg";
+export { default as EditProfile } from "@/src/assets/images/svg/edit (1).svg";
+export { default as PersonalDetails } from "@/src/assets/images/svg/Group (4).svg";
+export { default as Categories } from "@/src/assets/images/svg/wordpress_post-categories.svg";
+export { default as Notifications } from "@/src/assets/images/svg/mynaui_notification-solid.svg";
+export { default as Storage } from "@/src/assets/images/svg/Vector (13).svg";
+export { default as ArrowRight } from "@/src/assets/images/svg/Vector (14).svg";
+export { default as Logout } from "@/src/assets/images/svg/Vector (15).svg";
+export { default as Export } from "@/src/assets/images/svg/Vector (17).svg";

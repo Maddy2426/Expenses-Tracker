@@ -1,6 +1,6 @@
 import {
   ArrowLeft,
-  ArrowRight,
+  ArrowRightWithTail,
   Budget,
   Clock,
   Delete,
@@ -14,9 +14,9 @@ import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import { AmountCard } from ".";
+import { FlashList } from "@shopify/flash-list";
 
 const CategoryDetails = () => {
   const { id, name, iconName } = useLocalSearchParams<{
@@ -31,7 +31,7 @@ const CategoryDetails = () => {
     User: User,
     Budget: Budget,
     Transaction: Transaction,
-    ArrowRight: ArrowRight,
+    ArrowRightWithTail: ArrowRightWithTail,
   };
 
   const IconComponent = iconName
@@ -182,7 +182,7 @@ const CategoryDetails = () => {
         <Text className="text-labellarge font-medium text-dark">{name}</Text>
       </View>
       <View className="flex-1 px-3">
-        <FlatList
+        <FlashList
           data={categories}
           renderItem={({ item }) => <CategoryCard item={item} />}
           keyExtractor={(item) => item.id.toString()}
