@@ -42,3 +42,6 @@ export { default as Storage } from "@/src/assets/images/svg/Vector (13).svg";
 export { default as ArrowRight } from "@/src/assets/images/svg/Vector (14).svg";
 export { default as Logout } from "@/src/assets/images/svg/Vector (15).svg";
 export { default as Export } from "@/src/assets/images/svg/Vector (17).svg";
+export { default as Email } from "@/src/assets/images/svg/Group (5).svg";
+export { default as Password } from "@/src/assets/images/svg/Vector (18).svg";
+export { default as UserName } from "@/src/assets/images/svg/Vector (19).svg";
