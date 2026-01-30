@@ -81,52 +81,13 @@ const DEFAULT_ICONS: CategoryIcon[] = [
 type CategoriesIconsState = {
     icons: CategoryIcon[];
     init: () => Promise<void>;
-    saveIcons: (icons: CategoryIcon[]) => Promise<void>;
-    addIcon: (icon: CategoryIcon) => Promise<void>;
-    updateIcon: (id: string, updates: Partial<CategoryIcon>) => Promise<void>;
-    deleteIcon: (id: string) => Promise<void>;
-    resetToDefaults: () => Promise<void>;
 };
 
-export const useCategoriesIconsStore = create<CategoriesIconsState>((set, get) => ({
+export const useCategoriesIconsStore = create<CategoriesIconsState>((set) => ({
     icons: DEFAULT_ICONS,
 
     init: async () => {
-        // Force reset to defaults to replace old data
-        await AsyncStorage.setItem(KEY_CATEGORIES_ICONS, JSON.stringify(DEFAULT_ICONS));
-        set({ icons: DEFAULT_ICONS });
-    },
-
-    saveIcons: async (icons: CategoryIcon[]) => {
-        await AsyncStorage.setItem(KEY_CATEGORIES_ICONS, JSON.stringify(icons));
-        set({ icons });
-    },
-
-    addIcon: async (icon: CategoryIcon) => {
-        const current = get().icons;
-        const updated = [...current, icon];
-        await AsyncStorage.setItem(KEY_CATEGORIES_ICONS, JSON.stringify(updated));
-        set({ icons: updated });
-    },
-
-    updateIcon: async (id: string, updates: Partial<CategoryIcon>) => {
-        const current = get().icons;
-        const updated = current.map(icon =>
-            icon.id === id ? { ...icon, ...updates } : icon
-        );
-        await AsyncStorage.setItem(KEY_CATEGORIES_ICONS, JSON.stringify(updated));
-        set({ icons: updated });
-    },
-
-    deleteIcon: async (id: string) => {
-        const current = get().icons;
-        const updated = current.filter(icon => icon.id !== id);
-        await AsyncStorage.setItem(KEY_CATEGORIES_ICONS, JSON.stringify(updated));
-        set({ icons: updated });
-    },
-
-    resetToDefaults: async () => {
-        await AsyncStorage.setItem(KEY_CATEGORIES_ICONS, JSON.stringify(DEFAULT_ICONS));
+        // Always use default icons - these are read-only
         set({ icons: DEFAULT_ICONS });
     },
 }));
